@@ -1,0 +1,1 @@
+INSERT INTO GARMENT(name, description, registration_date) VALUES ('Black T-Shirt', 'Description ABC 123', '2019-09-01');
