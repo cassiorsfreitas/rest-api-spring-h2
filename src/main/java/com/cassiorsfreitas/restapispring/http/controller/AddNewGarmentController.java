@@ -21,7 +21,7 @@ import com.cassiorsfreitas.restapispring.http.dto.GarmentDTO;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/garments")
+@RequestMapping("/garment")
 public class AddNewGarmentController {
     
     final AddNewGarmentService addNewGarmentService;
@@ -38,10 +38,10 @@ public class AddNewGarmentController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Garment already exists");
         }
         
-        var garment = new GarmentEntity();
-        BeanUtils.copyProperties(garmentDto, garment); // Copy properties from garmentDto to garment
-        garment.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-        return ResponseEntity.status(HttpStatus.CREATED).body(addNewGarmentService.execute(garment));
+        var garmentEntity = new GarmentEntity();
+        BeanUtils.copyProperties(garmentDto, garmentEntity); // Copy properties from garmentDto to garment
+        garmentEntity.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        return ResponseEntity.status(HttpStatus.CREATED).body(addNewGarmentService.execute(garmentEntity));
     }
 
 }
