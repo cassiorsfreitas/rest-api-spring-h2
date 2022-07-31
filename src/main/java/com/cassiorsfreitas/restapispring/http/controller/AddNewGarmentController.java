@@ -23,25 +23,25 @@ import com.cassiorsfreitas.restapispring.http.dto.GarmentDTO;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/garment")
 public class AddNewGarmentController {
-    
-    final AddNewGarmentService addNewGarmentService;
-    final ExistsGarmentService existsGarmentService;
 
-    public AddNewGarmentController(AddNewGarmentService addNewGarmentService, ExistsGarmentService existsGarmentService) {
-        this.addNewGarmentService = addNewGarmentService;
-        this.existsGarmentService = existsGarmentService;
+  final AddNewGarmentService addNewGarmentService;
+  final ExistsGarmentService existsGarmentService;
+
+  public AddNewGarmentController(AddNewGarmentService addNewGarmentService, ExistsGarmentService existsGarmentService) {
+    this.addNewGarmentService = addNewGarmentService;
+    this.existsGarmentService = existsGarmentService;
+  }
+
+  @PostMapping
+  public ResponseEntity<Object> handle(@RequestBody @Valid GarmentDTO garmentDto) {
+    if (existsGarmentService.execute(garmentDto.getName())) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Garment already exists");
     }
 
-    @PostMapping
-    public ResponseEntity<Object> handle(@RequestBody @Valid GarmentDTO garmentDto) {
-        if (existsGarmentService.execute(garmentDto.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Garment already exists");
-        }
-        
-        var garmentEntity = new GarmentEntity();
-        BeanUtils.copyProperties(garmentDto, garmentEntity); // Copy properties from garmentDto to garment
-        garmentEntity.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-        return ResponseEntity.status(HttpStatus.CREATED).body(addNewGarmentService.execute(garmentEntity));
-    }
+    var garmentEntity = new GarmentEntity();
+    BeanUtils.copyProperties(garmentDto, garmentEntity); // Copy properties from garmentDto to garment
+    garmentEntity.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+    return ResponseEntity.status(HttpStatus.CREATED).body(addNewGarmentService.execute(garmentEntity));
+  }
 
 }
